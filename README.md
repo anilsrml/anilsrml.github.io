@@ -1,4 +1,6 @@
 # anilsrml.github.
+
+# Oyunun İçeriği
 - Oyuncu, fareyi sağa sola hareket ettirerek uzay gemisini kontrol edebilir.
 - Sol tıklama ile ateş edebilirsiniz. Amaç, uzay gemisi ile gelen uzaylıları yok etmektir.
 - Uzay gemisi çarpışma alanına giren herhangi bir uzaylı gemisi ile temas ederse oyun sona erer.
