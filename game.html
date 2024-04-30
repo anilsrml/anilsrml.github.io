@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport", content="width=device-width, initial-scale=1.0">
+        <title>Space Invaders</title>
+
+        <style>
+            body {
+    font-family:'Courier New', Courier, monospace;
+    text-align: center;
+    background-image: url('img/space.png');
+
+    
+}
+h1{
+    color: azure;
+}
+
+#canvas {
+    border: 5px solid white;
+    border-radius: 10px;
+}
+
+        </style>
+    </head>
+    <body>
+        <h1 >Uzay Macerası</h1>
+        <canvas  id="canvas"></canvas>    
+    </body>
+
+
+    <script>
+        
+// Oyun alanının boyutları ve temel değişkenler
+let boyut = 32;
+let mainColumns = 16;
+let mainRows = 16;
+
+let board;
+let canvasWidth = boyut * mainRows; // Canvasın genişliği 
+let canvasHeight = boyut * mainColumns; // Canvasın yüksekliği 
+let context;
+
+//ship
+let shipWidth = boyut*4;  // Gemi genişliği
+let shipHeight = boyut*4;  // Gemi yüksekliği
+let shipX = boyut * mainRows/2 - boyut;  // Geminin başlangıç X konumu
+let shipY = boyut * (mainColumns-1.4) - boyut*2;  // Geminin başlangıç Y konumu
+
+let ship = {
+    x : shipX,
+    y : shipY,
+    width : shipWidth,
+    height : shipHeight
+}
+
+let shipImg;
+
+
+// Uzaylılar dizisi ve uzaylıların genişliği, yüksekliği ve konumu
+let alienArray = [];
+let alienWidth = boyut*2;
+let alienHeight = boyut;
+let alienX = boyut;
+let alienY = boyut;
+let alienImg;
+
+let alienColumns = 2;
+let alienRows = 3;
+let alienCount = 0; //number of aliens to defeat
+let alienV = 1; //alien moving speed
+
+//Mermi dizisi
+let bulletArray = [];
+let bulletV = -6; // Mermilerin hareket hızı
+
+let score = 0;
+let gameOver = false;
+
+    // Oyun başlatma fonksiyonunu çağır
+   window.onload = function() {
+    confirm("Oyun sadece farenin sağa , sola hareketi ve sol tuşu ile oynanır. Hazırsanız tamama tıklayıp başlayabilirsiniz.İyi Eğlenceler");
+    
+         // Canvas ve kontekst oluşturma
+        board = document.getElementById("canvas");
+        board.width = canvasWidth;
+        board.height = canvasHeight;
+        context = board.getContext("2d"); 
+    
+         // Gemi resmini yükleme
+        shipImg = new Image();
+        shipImg.src = "img/ship.png";
+        shipImg.onload = function() {
+            context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+        }
+
+        // Uzaylı resmini yükleme ve oluşturma
+        alienImg = new Image();
+        alienImg.src = "img/alien.png";
+        createAlien();
+        
+        //Tarayıcının animasyonlu bu işlemi güncellemesini sağlar
+        requestAnimationFrame(update);
+
+        // Fare hareketini ve ateş etmeyi kontrol etme
+        document.addEventListener("click", moveShip);
+        document.addEventListener("click", shoot);
+    }
+
+
+function update() {
+    requestAnimationFrame(update);
+
+    //Oyun bittiyse durdurur
+    if (gameOver) {
+        return;
+    }
+
+
+    context.clearRect(0, 0, board.width, board.height);
+
+    //Uzay gemisini çizer
+    context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+
+    // Uzaylıları hareket ettirir ve çizer
+    for (let i = 0; i < alienArray.length; i++) {
+        let alien = alienArray[i];
+        if (alien.alive) {
+            alien.x += alienV;
+
+            // Uzaylıların tahtanın kenarına değip değmediğini kontrol eder
+            if (alien.x + alien.width >= board.width || alien.x <= 0) {
+                alienV *= -1;
+                alien.x += alienV*2;
+
+                // Tüm uzaylıları bir satır aşağı taşır
+                for (let j = 0; j < alienArray.length; j++) {
+                    alienArray[j].y += alienHeight;
+                }
+            }
+            context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
+
+            
+            if (alien.y >= ship.y) {
+                gameOver = true;
+            }
+        }
+    }
+
+     // Mermileri hareket ettirir ve çizer
+    for (let i = 0; i < bulletArray.length; i++) {
+        let bullet = bulletArray[i];
+        bullet.y += bulletV;
+        context.fillStyle="white";
+        context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+
+        //Mermi ve uzaylı çarpışmasını kontrol eder
+        for (let j = 0; j < alienArray.length; j++) {
+            let alien = alienArray[j];
+            if (!bullet.used && alien.alive && detectCollision(bullet, alien)) {
+                bullet.used = true;
+                alien.alive = false;
+                alienCount--;
+                score += 100;
+            }
+        }
+    }
+    
+    
+    while (bulletArray.length > 0 && (bulletArray[0].used || bulletArray[0].y < 0)) {
+        bulletArray.shift(); 
+    }
+
+
+    //Sonraki seviyeye geçiş
+    if (alienCount == 0) {
+         // Uzaylı sayısını ve hareket hızını artırma
+        score += alienRows * alienColumns * 100; 
+        alienRows = Math.min(alienRows + 1, mainRows/2 -2); 
+        alienColumns = Math.min(alienColumns + 1, mainColumns-4);  
+        if (alienV > 0) {
+            alienV += 0.2; 
+        }
+        else {
+            alienV -= 0.2; 
+        }
+        alienArray = [];
+        bulletArray = [];
+        createAlien();
+    }
+
+    //Skor tablosunu gösterir
+    context.fillStyle="white";
+    context.font="16px courier";
+    context.fillText("PUAN : " + score, 10, 20);
+}
+
+function moveShip(e) {
+    board.addEventListener("mousemove", function(e) {
+        // Fare imlecinin x kordinatı
+        var mouseX = e.clientX - board.offsetLeft;
+            
+        // Gemi pozisyonunu ayarlama
+        ship.x = mouseX - (ship.width / 2);
+    
+        // Gemiyi canvas sınırları içinde tutma
+        if (ship.x < 0) {
+            ship.x = 0;
+        }
+        if (ship.x + ship.width > canvasWidth) {     
+            ship.x = canvasWidth - ship.width;
+        }
+    });
+    
+}
+
+//Çarpışma kontrolü sağlar
+function detectCollision(a, b) {
+    return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;    
+}
+
+function createAlien() {
+    for (let c = 0; c < alienRows; c++) {
+        for (let r = 0; r < alienColumns; r++) {
+            let alien = {
+                img : alienImg,
+                x : alienX + c*alienWidth,
+                y : alienY + r*alienHeight,
+                width : alienWidth,
+                height : alienHeight,
+                alive : true
+            }
+            alienArray.push(alien);
+        }
+    }
+    alienCount = alienArray.length;
+}
+
+function shoot(e) {
+    if (gameOver) {
+        return;
+    }
+
+    //click'e basıldığında mermi oluşturur
+    document.addEventListener('click', function(event) {
+            let bullet = {
+                x : ship.x + shipWidth*15/32,
+                y : ship.y,
+                width : boyut/8,
+                height : boyut/2,
+                used : false
+            }
+            bulletArray.push(bullet);
+        
+      });
+
+    
+}
+
+    </script>
+</html>
