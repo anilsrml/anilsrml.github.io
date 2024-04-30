@@ -6,7 +6,7 @@
         <title>Space Invaders</title>
 
         <style>
-            body {
+            body{
     font-family:'Courier New', Courier, monospace;
     text-align: center;
     background-image: url('img/space.png');
@@ -17,7 +17,7 @@ h1{
     color: azure;
 }
 
-#canvas {
+#canvas{
     border: 5px solid white;
     border-radius: 10px;
 }
@@ -48,7 +48,7 @@ let shipHeight = boyut*4;  // Gemi yüksekliği
 let shipX = boyut * mainRows/2 - boyut;  // Geminin başlangıç X konumu
 let shipY = boyut * (mainColumns-1.4) - boyut*2;  // Geminin başlangıç Y konumu
 
-let ship = {
+let ship ={
     x : shipX,
     y : shipY,
     width : shipWidth,
@@ -79,7 +79,7 @@ let score = 0;
 let gameOver = false;
 
     // Oyun başlatma fonksiyonunu çağır
-   window.onload = function() {
+   window.onload = function(){
     confirm("Oyun sadece farenin sağa , sola hareketi ve sol tuşu ile oynanır. Amaç Dünyanı ele geçirmeye gelen vahşi ve çirkin canlıları öldürebildiğin en kısa sürede öldürerek senden sonraki savaşçıya destek sağlamak .Dünyaya dönemeyeceğini biliyorsun fakat arkada kalanlar için yapabileciğin tek şey bu.Hazırsan tamama tıklayıp başlayabilirsin.");
     
          // Canvas ve kontekst oluşturma
@@ -109,11 +109,11 @@ let gameOver = false;
     }
 
 
-function update() {
+function update(){
     requestAnimationFrame(update);
 
     //Oyun bittiyse durdurur
-    if (gameOver) {
+    if (gameOver){
         return;
     }
 
@@ -124,41 +124,41 @@ function update() {
     context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
 
     // Uzaylıları hareket ettirir ve çizer
-    for (let i = 0; i < alienArray.length; i++) {
+    for (let i = 0; i < alienArray.length; i++){
         let alien = alienArray[i];
         if (alien.alive) {
             alien.x += alienV;
 
             // Uzaylıların tahtanın kenarına değip değmediğini kontrol eder
-            if (alien.x + alien.width >= board.width || alien.x <= 0) {
+            if (alien.x + alien.width >= board.width || alien.x <= 0){
                 alienV *= -1;
                 alien.x += alienV*2;
 
                 // Tüm uzaylıları bir satır aşağı taşır
-                for (let j = 0; j < alienArray.length; j++) {
+                for (let j = 0; j < alienArray.length; j++){
                     alienArray[j].y += alienHeight;
                 }
             }
             context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height);
 
             
-            if (alien.y >= ship.y) {
+            if (alien.y >= ship.y){
                 gameOver = true;
             }
         }
     }
 
      // Mermileri hareket ettirir ve çizer
-    for (let i = 0; i < bulletArray.length; i++) {
+    for (let i = 0; i < bulletArray.length; i++){
         let bullet = bulletArray[i];
         bullet.y += bulletV;
         context.fillStyle="white";
         context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
 
         //Mermi ve uzaylı çarpışmasını kontrol eder
-        for (let j = 0; j < alienArray.length; j++) {
+        for (let j = 0; j < alienArray.length; j++){
             let alien = alienArray[j];
-            if (!bullet.used && alien.alive && detectCollision(bullet, alien)) {
+            if (!bullet.used && alien.alive && detectCollision(bullet, alien)){
                 bullet.used = true;
                 alien.alive = false;
                 alienCount--;
@@ -168,21 +168,21 @@ function update() {
     }
     
     
-    while (bulletArray.length > 0 && (bulletArray[0].used || bulletArray[0].y < 0)) {
+    while (bulletArray.length > 0 && (bulletArray[0].used || bulletArray[0].y < 0)){
         bulletArray.shift(); 
     }
 
 
     //Sonraki seviyeye geçiş
-    if (alienCount == 0) {
+    if (alienCount == 0){
          // Uzaylı sayısını ve hareket hızını artırma
         score += alienRows * alienColumns * 100; 
         alienRows = Math.min(alienRows + 1, mainRows/2 -2); 
         alienColumns = Math.min(alienColumns + 1, mainColumns-4);  
-        if (alienV > 0) {
+        if (alienV > 0){
             alienV += 0.2; 
         }
-        else {
+        else{
             alienV -= 0.2; 
         }
         alienArray = [];
@@ -196,8 +196,8 @@ function update() {
     context.fillText("PUAN : " + score, 10, 20);
 }
 
-function moveShip(e) {
-    board.addEventListener("mousemove", function(e) {
+function moveShip(e){
+    board.addEventListener("mousemove", function(e){
         // Fare imlecinin x kordinatı
         var mouseX = e.clientX - board.offsetLeft;
             
@@ -205,10 +205,10 @@ function moveShip(e) {
         ship.x = mouseX - (ship.width / 2);
     
         // Gemiyi canvas sınırları içinde tutma
-        if (ship.x < 0) {
+        if (ship.x < 0){
             ship.x = 0;
         }
-        if (ship.x + ship.width > canvasWidth) {     
+        if (ship.x + ship.width > canvasWidth){     
             ship.x = canvasWidth - ship.width;
         }
     });
@@ -216,14 +216,14 @@ function moveShip(e) {
 }
 
 //Çarpışma kontrolü sağlar
-function detectCollision(a, b) {
+function detectCollision(a, b){
     return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;    
 }
 
-function createAlien() {
-    for (let c = 0; c < alienRows; c++) {
-        for (let r = 0; r < alienColumns; r++) {
-            let alien = {
+function createAlien(){
+    for (let c = 0; c < alienRows; c++){
+        for (let r = 0; r < alienColumns; r++){
+            let alien ={
                 img : alienImg,
                 x : alienX + c*alienWidth,
                 y : alienY + r*alienHeight,
@@ -237,14 +237,14 @@ function createAlien() {
     alienCount = alienArray.length;
 }
 
-function shoot(e) {
-    if (gameOver) {
+function shoot(e){
+    if (gameOver){
         return;
     }
 
     //click'e basıldığında mermi oluşturur
-    document.addEventListener('click', function(event) {
-            let bullet = {
+    document.addEventListener('click', function(event){
+            let bullet ={
                 x : ship.x + shipWidth*15/32,
                 y : ship.y,
                 width : boyut/8,
