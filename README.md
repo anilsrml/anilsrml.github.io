@@ -4,6 +4,7 @@
 - Oyuncu, fareyi sağa sola hareket ettirerek uzay gemisini kontrol edebilir.
 - Sol tıklama ile ateş edebilirsiniz. Amaç, uzay gemisi ile gelen uzaylıları yok etmektir.
 - Uzay gemisi çarpışma alanına giren herhangi bir uzaylı gemisi ile temas ederse oyun sona erer.
+# Oyunun içeriğini anlattığım kısa videonun linki -> https://www.youtube.com/watch?v=dPsgJFiyEeY
 # Kontroller
 - Fareyi sağa sola hareket ettirme: Fareyi sağa veya sola hareket ettirin.
 - Ateş etme: Sol tıkla ateş edin.
