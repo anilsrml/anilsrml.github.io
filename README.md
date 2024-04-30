@@ -10,7 +10,7 @@
 # Kullanılan dil
 -Oyunu geliştirirken javascript dili kulanıldı.Css ile de bir takım düzeltmeler yapıldı.
 # Katkıda Bulunma
-Herhangi bir hata bulursanız veya geliştirme önerileriniz varsa, lütfen bir konu açın veya bir pull isteği gönderin. Katkılarınızı bekliyorum!
+-Geliştirme önerileriniz varsa geri dönüşlerinizi ve katkılarınızı bekliyorum.
 
 # Oyun içi görseller
 ![image](https://github.com/anilsrml/anilsrml.github.io/assets/126188687/20e0f118-aa22-4574-b673-ef7af5a2c257)
