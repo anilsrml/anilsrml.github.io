@@ -12,7 +12,7 @@
 -Oyunu geliştirirken javascript dili kulanıldı.Css ile de bir takım düzeltmeler yapıldı.
 # Katkıda Bulunma
 -Geliştirme önerileriniz varsa geri dönüşlerinizi ve katkılarınızı bekliyorum.
-
+# Oyunun linki -> https://anilsrml.github.io/game.html
 # Oyun içi görseller
 ![image](https://github.com/anilsrml/anilsrml.github.io/assets/126188687/20e0f118-aa22-4574-b673-ef7af5a2c257)
 ![image](https://github.com/anilsrml/anilsrml.github.io/assets/126188687/aa739db3-85f4-432a-bff9-f25fc31ed0a0)
