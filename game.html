@@ -80,7 +80,7 @@ let gameOver = false;
 
     // Oyun başlatma fonksiyonunu çağır
    window.onload = function(){
-    confirm("Oyun sadece farenin sağa , sola hareketi ve sol tuşu ile oynanır. Amaç Dünyanı ele geçirmeye gelen vahşi ve çirkin canlıları öldürebildiğin en kısa sürede öldürerek senden sonraki savaşçıya destek sağlamak .Dünyaya dönemeyeceğini biliyorsun fakat arkada kalanlar için yapabileciğin tek şey bu.Hazırsan tamama tıkla ve 2.aşama olan 1 fare tiki atıp oyuna başla.");
+    confirm("Oyun sadece farenin sağa , sola hareketi ve sol tuşu ile oynanır.Amaç Dünyanı ele geçirmeye gelen vahşi ve çirkin canlıları öldürebildiğin en kısa sürede öldürerek senden sonraki savaşçıya destek sağlamak.Öldürdüğün her bir canlı 100 puan olarak hanene yazılıcak.Puanın miktarın ne kadar fazlaysa ailende bu istilada o kadar güvende kalıcak.Dünyaya dönemeyeceğini biliyorsun fakat arkada kalanlar için yapabileciğin tek şey bu.Hazırsan tamama tıkla ve 2.aşama olan 1 fare tiki atıp oyuna başla.");
     
          // Canvas ve kontekst oluşturma
         board = document.getElementById("canvas");
@@ -127,7 +127,7 @@ function update(){
     for (let i = 0; i < alienArray.length; i++){
         let alien = alienArray[i];
         if (alien.alive) {
-            alien.x += alienV;
+            alien.x += alienV*0.5;
 
             // Uzaylıların tahtanın kenarına değip değmediğini kontrol eder
             if (alien.x + alien.width >= board.width || alien.x <= 0){
@@ -180,7 +180,7 @@ function update(){
         alienRows = Math.min(alienRows + 1, mainRows/2 -2); 
         alienColumns = Math.min(alienColumns + 1, mainColumns-4);  
         if (alienV > 0){
-            alienV += 0.2; 
+            alienV += 0.1; 
         }
         else{
             alienV -= 0.2; 
